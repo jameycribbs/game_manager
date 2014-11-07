@@ -7,14 +7,15 @@ import (
 )
 
 type Game struct {
-	window         *sdl.Window
-	renderer       *sdl.Renderer
-	event          sdl.Event
-	running        bool
-	currentFrame   int32
-	textureManager *TextureManager
-	inputHandler   *InputHandler
-	gameObjects    []GameObject
+	window           *sdl.Window
+	renderer         *sdl.Renderer
+	event            sdl.Event
+	running          bool
+	currentFrame     int32
+	textureManager   *TextureManager
+	inputHandler     *InputHandler
+	gameObjects      []GameObject
+	gameStateMachine *GameStateMachine
 }
 
 //*****************************************************************************
@@ -53,6 +54,9 @@ func (game *Game) Setup(title string, xpos int, ypos int, width int, height int,
 	game.gameObjects = append(game.gameObjects, NewPlayer(100, 100, 128, 82, "animate"))
 	game.gameObjects = append(game.gameObjects, NewEnemy(300, 300, 128, 82, "animate"))
 
+	game.gameStateMachine = NewGameStateMachine()
+	game.gameStateMachine.changeState(NewMenuState())
+
 	game.running = true
 
 	return true
@@ -63,6 +67,10 @@ func (game *Game) Setup(title string, xpos int, ypos int, width int, height int,
 //*****************************************************************************
 func (game *Game) HandleEvents() {
 	game.inputHandler.update(game)
+
+	if game.inputHandler.isKeyDown(sdl.SCANCODE_RETURN) {
+		game.gameStateMachine.changeState(NewPlayState())
+	}
 }
 
 //*****************************************************************************

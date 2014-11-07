@@ -38,11 +38,21 @@ func (player *Player) draw(game *Game) {
 func (player *Player) update(game *Game) {
 	player.currentFrame = int32(((sdl.GetTicks() / 100) % 6))
 
-	vec := game.inputHandler.getMousePosition()
-	vec = vec.Subtract(&player.position)
-	vec = vec.Divide(100)
+	if game.inputHandler.isKeyDown(sdl.SCANCODE_RIGHT) {
+		player.velocity.X = 2
+	}
 
-	player.velocity = vec
+	if game.inputHandler.isKeyDown(sdl.SCANCODE_LEFT) {
+		player.velocity.X = -2
+	}
+
+	if game.inputHandler.isKeyDown(sdl.SCANCODE_UP) {
+		player.velocity.Y = -2
+	}
+
+	if game.inputHandler.isKeyDown(sdl.SCANCODE_DOWN) {
+		player.velocity.Y = 2
+	}
 
 	player.velocity = player.velocity.Add(&player.acceleration)
 	player.position = player.position.Add(&player.velocity)
