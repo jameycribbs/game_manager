@@ -54,6 +54,9 @@ func (game *Game) Setup(title string, xpos int, ypos int, width int, height int,
 	game.gameObjects = append(game.gameObjects, NewPlayer(100, 100, 128, 82, "animate"))
 	game.gameObjects = append(game.gameObjects, NewEnemy(300, 300, 128, 82, "animate"))
 
+	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton"))
+	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton"))
+
 	game.gameStateMachine = NewGameStateMachine(game)
 	game.gameStateMachine.changeState(NewMenuState())
 
@@ -77,6 +80,7 @@ func (game *Game) HandleEvents() {
 // Update
 //*****************************************************************************
 func (game *Game) Update() {
+
 	/*
 		for _, gameObject := range game.gameObjects {
 			gameObject.update(game)
@@ -108,6 +112,11 @@ func (game *Game) Render() {
 //*****************************************************************************
 func (game *Game) Clean() {
 	game.inputHandler.clean()
+
+	game.gameStateMachine.clean()
+	game.gameStateMachine = nil
+
+	game.textureManager.clearTextureMap()
 
 	game.renderer.Destroy()
 	game.window.Destroy()

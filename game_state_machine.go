@@ -1,5 +1,9 @@
 package game_manager
 
+import (
+//	"fmt"
+)
+
 type GameStateMachine struct {
 	game       *Game
 	gameStates []GameState
@@ -26,11 +30,8 @@ func (gsm *GameStateMachine) pushState(state GameState) {
 //*****************************************************************************
 func (gsm *GameStateMachine) popState() {
 	if len(gsm.gameStates) > 0 {
-		gameState := gsm.gameStates[len(gsm.gameStates)-1]
-
-		if gameState.onExit(gsm.game) {
-			gsm.gameStates = gsm.gameStates[:len(gsm.gameStates)-1]
-		}
+		gsm.gameStates[len(gsm.gameStates)-1].onExit(gsm.game)
+		gsm.gameStates = gsm.gameStates[:len(gsm.gameStates)-1]
 	}
 
 	gsm.gameStates[len(gsm.gameStates)-1].resume(gsm.game)
@@ -49,8 +50,8 @@ func (gsm *GameStateMachine) changeState(state GameState) {
 		gsm.gameStates = gsm.gameStates[:len(gsm.gameStates)-1]
 	}
 
-	gsm.gameStates = append(gsm.gameStates, state)
 	state.onEnter(gsm.game)
+	gsm.gameStates = append(gsm.gameStates, state)
 }
 
 //*****************************************************************************

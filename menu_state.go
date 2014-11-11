@@ -51,18 +51,16 @@ func (ms *MenuState) resume(game *Game) {
 // onEnter
 //*****************************************************************************
 func (ms *MenuState) onEnter(game *Game) bool {
-	if !game.textureManager.load("assets/button.png", "playButton", game.renderer) {
+	if !game.textureManager.load("assets/button.png", "playbutton", game.renderer) {
 		return false
 	}
 
-	if !game.textureManager.load("assets/exit.png", "playButton", game.renderer) {
+	if !game.textureManager.load("assets/exit.png", "exitbutton", game.renderer) {
 		return false
 	}
 
-	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton"))
-	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton"))
-
-	fmt.Println("entering MenuState")
+	ms.gameObjects = append(game.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton"))
+	ms.gameObjects = append(game.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton"))
 
 	return true
 }

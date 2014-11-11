@@ -31,7 +31,7 @@ func (tm *TextureManager) load(fileName string, id string, renderer *sdl.Rendere
 		fmt.Fprintf(os.Stderr, "Failed to load image: %s", sdl.GetError())
 		return false
 	} else {
-		fmt.Println("image load success")
+		fmt.Println(fileName + " image load success")
 	}
 
 	texture = renderer.CreateTextureFromSurface(tempSurface)
@@ -109,4 +109,11 @@ func (tm *TextureManager) drawFrame(id string, x int32, y int32, width int32, he
 //*****************************************************************************
 func (tm *TextureManager) clearFromTextureMap(id string) {
 	delete(tm.textureMap, id)
+}
+
+//*****************************************************************************
+// clearTextureMap
+//*****************************************************************************
+func (tm *TextureManager) clearTextureMap() {
+	tm.textureMap = nil
 }
