@@ -103,3 +103,10 @@ func (tm *TextureManager) drawFrame(id string, x int32, y int32, width int32, he
 
 	renderer.CopyEx(tm.textureMap[id], &srcRect, &destRect, 0, &centerPoint, flip)
 }
+
+//*****************************************************************************
+// clearFromTextureMap
+//*****************************************************************************
+func (tm *TextureManager) clearFromTextureMap(id string) {
+	delete(tm.textureMap, id)
+}

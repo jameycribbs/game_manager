@@ -1,11 +1,13 @@
 package game_manager
 
 type GameState interface {
-	update()
-	render()
+	update(*Game)
+	render(*Game)
 
-	onEnter() bool
-	onExit() bool
+	resume(*Game)
+
+	onEnter(*Game) bool
+	onExit(*Game) bool
 
 	getStateID() string
 }

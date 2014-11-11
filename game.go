@@ -54,7 +54,7 @@ func (game *Game) Setup(title string, xpos int, ypos int, width int, height int,
 	game.gameObjects = append(game.gameObjects, NewPlayer(100, 100, 128, 82, "animate"))
 	game.gameObjects = append(game.gameObjects, NewEnemy(300, 300, 128, 82, "animate"))
 
-	game.gameStateMachine = NewGameStateMachine()
+	game.gameStateMachine = NewGameStateMachine(game)
 	game.gameStateMachine.changeState(NewMenuState())
 
 	game.running = true
@@ -77,9 +77,13 @@ func (game *Game) HandleEvents() {
 // Update
 //*****************************************************************************
 func (game *Game) Update() {
-	for _, gameObject := range game.gameObjects {
-		gameObject.update(game)
-	}
+	/*
+		for _, gameObject := range game.gameObjects {
+			gameObject.update(game)
+		}
+	*/
+
+	game.gameStateMachine.update()
 }
 
 //*****************************************************************************
@@ -88,9 +92,13 @@ func (game *Game) Update() {
 func (game *Game) Render() {
 	game.renderer.Clear()
 
-	for _, gameObject := range game.gameObjects {
-		gameObject.draw(game)
-	}
+	/*
+		for _, gameObject := range game.gameObjects {
+			gameObject.draw(game)
+		}
+	*/
+
+	game.gameStateMachine.render()
 
 	game.renderer.Present()
 }

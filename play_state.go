@@ -1,39 +1,49 @@
 package game_manager
 
+import (
+	"fmt"
+)
+
 type PlayState struct {
-	menuID string
+	playID string
 }
 
 //*****************************************************************************
 // NewPlayState
 //*****************************************************************************
 func NewPlayState() *PlayState {
-	return &PlayState{menuID: "PLAY"}
+	return &PlayState{playID: "PLAY"}
 }
 
 //*****************************************************************************
 // getStateID
 //*****************************************************************************
 func (ps *PlayState) getStateID() string {
-	return ps.PlayID
+	return ps.playID
 }
 
 //*****************************************************************************
 // update
 //*****************************************************************************
-func (ps *PlayState) update() {
+func (ps *PlayState) update(game *Game) {
 }
 
 //*****************************************************************************
 // render
 //*****************************************************************************
-func (ps *PlayState) render() {
+func (ps *PlayState) render(game *Game) {
+}
+
+//*****************************************************************************
+// resume
+//*****************************************************************************
+func (ps *PlayState) resume(game *Game) {
 }
 
 //*****************************************************************************
 // onEnter
 //*****************************************************************************
-func (ps *PlayState) onEnter() bool {
+func (ps *PlayState) onEnter(game *Game) bool {
 	fmt.Println("entering PlayState")
 	return true
 }
@@ -41,7 +51,7 @@ func (ps *PlayState) onEnter() bool {
 //*****************************************************************************
 // onExit
 //*****************************************************************************
-func (ps *PlayState) onExit() bool {
+func (ps *PlayState) onExit(game *Game) bool {
 	fmt.Println("exiting PlayState")
 	return true
 }
