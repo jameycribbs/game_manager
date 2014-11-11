@@ -59,8 +59,16 @@ func (ms *MenuState) onEnter(game *Game) bool {
 		return false
 	}
 
-	ms.gameObjects = append(game.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton"))
-	ms.gameObjects = append(game.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton"))
+	menuToPlay := func() {
+		fmt.Println("Play button clicked")
+	}
+
+	exitFromMenu := func() {
+		fmt.Println("Exit button clicked")
+	}
+
+	ms.gameObjects = append(ms.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton", menuToPlay))
+	ms.gameObjects = append(ms.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton", exitFromMenu))
 
 	return true
 }

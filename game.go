@@ -51,11 +51,8 @@ func (game *Game) Setup(title string, xpos int, ypos int, width int, height int,
 
 	game.textureManager.load("assets/animate-alpha.png", "animate", game.renderer)
 
-	game.gameObjects = append(game.gameObjects, NewPlayer(100, 100, 128, 82, "animate"))
-	game.gameObjects = append(game.gameObjects, NewEnemy(300, 300, 128, 82, "animate"))
-
-	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton"))
-	game.gameObjects = append(game.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton"))
+	//	game.gameObjects = append(game.gameObjects, NewPlayer(100, 100, 128, 82, "animate"))
+	//	game.gameObjects = append(game.gameObjects, NewEnemy(300, 300, 128, 82, "animate"))
 
 	game.gameStateMachine = NewGameStateMachine(game)
 	game.gameStateMachine.changeState(NewMenuState())

@@ -20,14 +20,16 @@ type MenuButton struct {
 	textureID    string
 	currentRow   int
 	currentFrame int32
+	bReleased    bool
+	cb           func()
 }
 
 //*****************************************************************************
 // NewMenuButton
 //*****************************************************************************
-func NewMenuButton(x int32, y int32, width int32, height int32, textureID string) *MenuButton {
+func NewMenuButton(x int32, y int32, width int32, height int32, textureID string, cb func()) *MenuButton {
 	return &MenuButton{position: Vector2D{x, y}, velocity: Vector2D{0, 0}, width: width, height: height, textureID: textureID,
-		currentRow: 1, currentFrame: 1}
+		currentRow: 1, currentFrame: 1, cb: cb}
 }
 
 //*****************************************************************************
@@ -44,11 +46,18 @@ func (mb *MenuButton) draw(game *Game) {
 func (mb *MenuButton) update(game *Game) {
 	mousePos := game.inputHandler.getMousePosition()
 
-	if mousePos.X < (mb.position.X+mb.width) && mousePos.X > mb.position.X && mousePos.Y < (mb.position.Y+mb.height) && mousePos.Y > mb.position.Y {
-		mb.currentFrame = MOUSE_OVER
+	if mousePos.X < (mb.position.X+mb.width) &&
+		mousePos.X > mb.position.X &&
+		mousePos.Y < (mb.position.Y+mb.height) &&
+		mousePos.Y > mb.position.Y {
 
-		if game.inputHandler.getMouseButtonState(LEFT) {
+		if game.inputHandler.getMouseButtonState(LEFT) && mb.bReleased {
 			mb.currentFrame = CLICKED
+			mb.cb()
+			mb.bReleased = false
+		} else if !game.inputHandler.getMouseButtonState(LEFT) {
+			mb.bReleased = true
+			mb.currentFrame = MOUSE_OVER
 		}
 	} else {
 		mb.currentFrame = MOUSE_OUT
