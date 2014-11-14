@@ -27,9 +27,30 @@ type MenuButton struct {
 //*****************************************************************************
 // NewMenuButton
 //*****************************************************************************
-func NewMenuButton(x int32, y int32, width int32, height int32, textureID string, cb func()) *MenuButton {
+func NewMenuButton(x float32, y float32, width int32, height int32, textureID string, cb func()) *MenuButton {
 	return &MenuButton{position: Vector2D{x, y}, velocity: Vector2D{0, 0}, width: width, height: height, textureID: textureID,
 		currentRow: 1, currentFrame: 1, cb: cb}
+}
+
+//*****************************************************************************
+// Position
+//*****************************************************************************
+func (mb *MenuButton) Position() Vector2D {
+	return mb.position
+}
+
+//*****************************************************************************
+// Width
+//*****************************************************************************
+func (mb *MenuButton) Width() int32 {
+	return mb.width
+}
+
+//*****************************************************************************
+// Height
+//*****************************************************************************
+func (mb *MenuButton) Height() int32 {
+	return mb.height
 }
 
 //*****************************************************************************
@@ -46,9 +67,9 @@ func (mb *MenuButton) draw(game *Game) {
 func (mb *MenuButton) update(game *Game) {
 	mousePos := game.inputHandler.getMousePosition()
 
-	if mousePos.X < (mb.position.X+mb.width) &&
+	if mousePos.X < (mb.position.X+float32(mb.width)) &&
 		mousePos.X > mb.position.X &&
-		mousePos.Y < (mb.position.Y+mb.height) &&
+		mousePos.Y < (mb.position.Y+float32(mb.height)) &&
 		mousePos.Y > mb.position.Y {
 
 		if game.inputHandler.getMouseButtonState(LEFT) && mb.bReleased {

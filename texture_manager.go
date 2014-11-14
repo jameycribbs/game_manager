@@ -80,7 +80,7 @@ func (tm *TextureManager) draw(id string, x int32, y int32, width int32, height 
 //*****************************************************************************
 // drawFrame
 //*****************************************************************************
-func (tm *TextureManager) drawFrame(id string, x int32, y int32, width int32, height int32, currentRow int, currentFrame int32,
+func (tm *TextureManager) drawFrame(id string, x float32, y float32, width int32, height int32, currentRow int, currentFrame int32,
 	renderer *sdl.Renderer, flip sdl.RendererFlip) {
 	var srcRect sdl.Rect
 	var destRect sdl.Rect
@@ -98,8 +98,8 @@ func (tm *TextureManager) drawFrame(id string, x int32, y int32, width int32, he
 	srcRect.H = height
 	destRect.H = height
 
-	destRect.X = x
-	destRect.Y = y
+	destRect.X = int32(x)
+	destRect.Y = int32(y)
 
 	renderer.CopyEx(tm.textureMap[id], &srcRect, &destRect, 0, &centerPoint, flip)
 }

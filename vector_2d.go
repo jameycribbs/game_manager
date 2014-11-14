@@ -5,8 +5,8 @@ import (
 )
 
 type Vector2D struct {
-	X int32
-	Y int32
+	X float32
+	Y float32
 }
 
 //*****************************************************************************
@@ -33,15 +33,15 @@ func (v *Vector2D) Subtract(v2 *Vector2D) Vector2D {
 //*****************************************************************************
 // Multiply
 //*****************************************************************************
-func (v *Vector2D) Multiply(scalar float64) Vector2D {
-	return Vector2D{X: int32(float64(v.X) * scalar), Y: int32(float64(v.Y) * scalar)}
+func (v *Vector2D) Multiply(scalar float32) Vector2D {
+	return Vector2D{X: v.X * scalar, Y: v.Y * scalar}
 }
 
 //*****************************************************************************
 // Divide
 //*****************************************************************************
-func (v *Vector2D) Divide(scalar float64) Vector2D {
-	return Vector2D{X: int32(float64(v.X) / scalar), Y: int32(float64(v.Y) / scalar)}
+func (v *Vector2D) Divide(scalar float32) Vector2D {
+	return Vector2D{X: v.X / scalar, Y: v.Y / scalar}
 }
 
 //*****************************************************************************
@@ -51,6 +51,6 @@ func (v *Vector2D) Normalize() {
 	l := v.Length()
 
 	if l > 0 {
-		v.Multiply(1 / l)
+		v.Multiply(1 / float32(l))
 	}
 }

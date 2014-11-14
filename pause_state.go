@@ -4,30 +4,30 @@ import (
 	"fmt"
 )
 
-type MenuState struct {
-	menuID      string
+type PauseState struct {
+	pauseID     string
 	gameObjects []GameObject
 }
 
 //*****************************************************************************
-// NewMenuState
+// NewPauseState
 //*****************************************************************************
-func NewMenuState() *MenuState {
-	return &MenuState{menuID: "MENU"}
+func NewPauseState() *PauseState {
+	return &PauseState{pauseID: "PAUSE"}
 }
 
 //*****************************************************************************
 // getStateID
 //*****************************************************************************
-func (ms *MenuState) getStateID() string {
-	return ms.menuID
+func (ps *PauseState) getStateID() string {
+	return ps.pauseID
 }
 
 //*****************************************************************************
 // update
 //*****************************************************************************
-func (ms *MenuState) update(game *Game) {
-	for _, gameObject := range ms.gameObjects {
+func (ps *PauseState) update(game *Game) {
+	for _, gameObject := range ps.gameObjects {
 		gameObject.update(game)
 	}
 }
@@ -35,8 +35,8 @@ func (ms *MenuState) update(game *Game) {
 //*****************************************************************************
 // render
 //*****************************************************************************
-func (ms *MenuState) render(game *Game) {
-	for _, gameObject := range ms.gameObjects {
+func (ps *PauseState) render(game *Game) {
+	for _, gameObject := range ps.gameObjects {
 		gameObject.draw(game)
 	}
 }
@@ -44,31 +44,33 @@ func (ms *MenuState) render(game *Game) {
 //*****************************************************************************
 // resume
 //*****************************************************************************
-func (ms *MenuState) resume(game *Game) {
+func (ps *PauseState) resume(game *Game) {
 }
 
 //*****************************************************************************
 // onEnter
 //*****************************************************************************
-func (ms *MenuState) onEnter(game *Game) bool {
-	if !game.textureManager.load("assets/button.png", "playbutton", game.renderer) {
+func (ps *PauseState) onEnter(game *Game) bool {
+	if !game.textureManager.load("assets/resume.png", "resumebutton", game.renderer) {
 		return false
 	}
 
-	if !game.textureManager.load("assets/exit.png", "exitbutton", game.renderer) {
+	if !game.textureManager.load("assets/main.png", "mainbutton", game.renderer) {
 		return false
 	}
 
-	menuToPlay := func() {
-		game.gameStateMachine.changeState(NewPlayState())
+	pauseToMain := func() {
+		game.gameStateMachine.changeState(NewMenuState())
 	}
 
-	exitFromMenu := func() {
-		game.SetRunning(false)
+	resumePlay := func() {
+		game.gameStateMachine.popState()
 	}
 
-	ms.gameObjects = append(ms.gameObjects, NewMenuButton(100, 100, 400, 100, "playbutton", menuToPlay))
-	ms.gameObjects = append(ms.gameObjects, NewMenuButton(100, 300, 400, 100, "exitbutton", exitFromMenu))
+	ps.gameObjects = append(ps.gameObjects, NewMenuButton(200, 100, 200, 80, "mainbutton", pauseToMain))
+	ps.gameObjects = append(ps.gameObjects, NewMenuButton(200, 300, 200, 80, "resumebutton", resumePlay))
+
+	fmt.Println("entering PauseState")
 
 	return true
 }
@@ -76,16 +78,18 @@ func (ms *MenuState) onEnter(game *Game) bool {
 //*****************************************************************************
 // onExit
 //*****************************************************************************
-func (ms *MenuState) onExit(game *Game) bool {
-	for _, gameObject := range ms.gameObjects {
+func (ps *PauseState) onExit(game *Game) bool {
+	for _, gameObject := range ps.gameObjects {
 		gameObject.clean()
 	}
 
-	ms.gameObjects = ms.gameObjects[:0]
+	ps.gameObjects = ps.gameObjects[:0]
 
-	game.textureManager.clearFromTextureMap("playbutton")
-	game.textureManager.clearFromTextureMap("exitbutton")
+	game.textureManager.clearFromTextureMap("resumebutton")
+	game.textureManager.clearFromTextureMap("mainbutton")
 
-	fmt.Println("exiting MenuState")
+	game.inputHandler.reset()
+
+	fmt.Println("exiting PauseState")
 	return true
 }

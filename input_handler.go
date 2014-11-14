@@ -69,8 +69,8 @@ func (ih *InputHandler) onMouseButtonUp(event sdl.Event) {
 func (ih *InputHandler) onMouseMove(event sdl.Event) {
 	var mouseMotionEvent = event.(*sdl.MouseMotionEvent)
 
-	ih.mousePosition.X = mouseMotionEvent.X
-	ih.mousePosition.Y = mouseMotionEvent.Y
+	ih.mousePosition.X = float32(mouseMotionEvent.X)
+	ih.mousePosition.Y = float32(mouseMotionEvent.Y)
 }
 
 //*****************************************************************************

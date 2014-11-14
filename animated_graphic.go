@@ -5,7 +5,7 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-type Enemy struct {
+type AnimatedGraphic struct {
 	position     Vector2D
 	velocity     Vector2D
 	acceleration Vector2D
@@ -14,64 +14,73 @@ type Enemy struct {
 	textureID    string
 	currentRow   int
 	currentFrame int32
+	bReleased    bool
+	animSpeed    int
 }
 
 //*****************************************************************************
-// NewEnemy
+// NewAnimatedGraphic
 //*****************************************************************************
-func NewEnemy(x float32, y float32, width int32, height int32, textureID string) *Enemy {
-	return &Enemy{position: Vector2D{x, y}, velocity: Vector2D{0.001, 2}, width: width, height: height, textureID: textureID,
-		currentRow: 1, currentFrame: 1}
+func NewAnimatedGraphic(x float32, y float32, width int32, height int32, textureID string, animSpeed int) *AnimatedGraphic {
+	return &AnimatedGraphic{position: Vector2D{x, y}, velocity: Vector2D{0, 0}, width: width, height: height, textureID: textureID,
+		currentRow: 1, currentFrame: 1, animSpeed: animSpeed}
 }
 
 //*****************************************************************************
 // Position
 //*****************************************************************************
-func (enemy *Enemy) Position() Vector2D {
-	return enemy.position
+func (ag *AnimatedGraphic) Position() Vector2D {
+	return ag.position
 }
 
 //*****************************************************************************
 // Width
 //*****************************************************************************
-func (enemy *Enemy) Width() int32 {
-	return enemy.width
+func (ag *AnimatedGraphic) Width() int32 {
+	return ag.width
 }
 
 //*****************************************************************************
 // Height
 //*****************************************************************************
-func (enemy *Enemy) Height() int32 {
-	return enemy.height
+func (ag *AnimatedGraphic) Height() int32 {
+	return ag.height
 }
 
 //*****************************************************************************
 // draw
 //*****************************************************************************
-func (enemy *Enemy) draw(game *Game) {
-	game.textureManager.drawFrame(enemy.textureID, enemy.position.X, enemy.position.Y, enemy.width, enemy.height, enemy.currentRow,
-		enemy.currentFrame, game.renderer, sdl.FLIP_NONE)
+func (ag *AnimatedGraphic) draw(game *Game) {
+	game.textureManager.drawFrame(ag.textureID, ag.position.X, ag.position.Y, ag.width, ag.height, ag.currentRow,
+		ag.currentFrame, game.renderer, sdl.FLIP_NONE)
 }
 
 //*****************************************************************************
 // update
 //*****************************************************************************
-func (enemy *Enemy) update(game *Game) {
-	enemy.currentFrame = int32(((sdl.GetTicks() / 100) % 6))
+func (ag *AnimatedGraphic) update(game *Game) {
+	mousePos := game.inputHandler.getMousePosition()
 
-	if enemy.position.Y < 0 {
-		enemy.velocity.Y = 2
-	} else if enemy.position.Y > 400 {
-		enemy.velocity.Y = -2
+	if mousePos.X < (ag.position.X+float32(ag.width)) &&
+		mousePos.X > ag.position.X &&
+		mousePos.Y < (ag.position.Y+float32(ag.height)) &&
+		mousePos.Y > ag.position.Y {
+
+		if game.inputHandler.getMouseButtonState(LEFT) && ag.bReleased {
+			ag.currentFrame = CLICKED
+			ag.bReleased = false
+		} else if !game.inputHandler.getMouseButtonState(LEFT) {
+			ag.bReleased = true
+			ag.currentFrame = MOUSE_OVER
+		}
+	} else {
+		ag.currentFrame = MOUSE_OUT
 	}
-
-	//	enemy.velocity = enemy.velocity.Add(&enemy.acceleration)
-	enemy.position = enemy.position.Add(&enemy.velocity)
 }
 
 //*****************************************************************************
 // clean
 //*****************************************************************************
-func (enemy *Enemy) clean() {
-	fmt.Println("clean enemy")
+func (ag *AnimatedGraphic) clean() {
+	fmt.Println("clean animatedGraphic")
 }
